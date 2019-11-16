@@ -1,0 +1,27 @@
+
+-include $(patsubst %,$(DEPSPATH)/%,$(SRC:.c=.d))
+${DEPSPATH}/%.d: %.c
+	@set -e; rm -f $@; \
+	$(CC) -M $(CPPFLAGS) $< > $@.$$$$; \
+	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$
+
+
+    $(ODIR)/test.o : test.c $(IDIR)/test.h
+	$(CC) -c -o $@ $< $(CFLAGS) 
+
+
+$(ODIR)/main.o : main.c $(IDIR)/LCD.h $(IDIR)/main.h
+	$(CC) -c -o $@ $< $(CFLAGS) 
+
+
+$(ODIR)/LCD.o : LCD.c $(IDIR)/DIO.h $(IDIR)/LCD.h
+	$(CC) -c -o $@ $< $(CFLAGS) 
+
+
+$(ODIR)/DIO.o : DIO.c $(IDIR)/DIO.h $(IDIR)/code.h
+	$(CC) -c -o $@ $< $(CFLAGS) 
+
+
+$(ODIR)/code.o : code.c $(IDIR)/code.h
+	$(CC) -c -o $@ $< $(CFLAGS) 
